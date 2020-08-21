@@ -241,13 +241,22 @@ class StyleEncoder(nn.Module):
             self.unshared += [nn.Linear(dim_out, style_dim)]
 
     def forward(self, x, y):
+        # PRINTS TO BE DELETED!
+        print('X.shape, Y.shape and Y:')
+        print(x.shape, y.shape, y)
         h = self.shared(x)
+        print('H.shape before:', h.shape)
         h = h.view(h.size(0), -1)
+        print('H.shape after:', h.shape)
         out = []
         for layer in self.unshared:
             out += [layer(h)]
+        print('len(out) before:', len(out))
         out = torch.stack(out, dim=1)  # (batch, num_domains, style_dim)
+        print('out.shape after:', out.shape)
+        print('OUT:', out)
         idx = torch.LongTensor(range(y.size(0))).to(y.device)
+        print('IDX:', idx)
         s = out[idx, y]  # (batch, style_dim)
         return s
 

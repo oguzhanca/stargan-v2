@@ -422,6 +422,12 @@ def align_faces(args, input_dir, output_dir):
     os.makedirs(output_dir, exist_ok=True)
     fnames.sort()
     for fname in fnames:
+        
+        # ADDED IF COND TO SKIP JUPYTER NOTEBOOK HIDDEN FILES.
+        if fname == '.ipynb_checkpoints':
+            print('File name -', fname, '- is skipped!')
+            continue
+        
         image = Image.open(os.path.join(input_dir, fname)).convert('RGB')
         x = transform(image).unsqueeze(0)
         x_aligned = aligner.align(x)

@@ -176,11 +176,15 @@ class InputFetcher:
         self.mode = mode
 
     def _fetch_inputs(self):
+        print('InputFetcher._fetch_inputs method called..')
         try:
+            print('self.ITER:', self.iter)
             x, y = next(self.iter)
         except (AttributeError, StopIteration):
             self.iter = iter(self.loader)
             x, y = next(self.iter)
+            print('self.LOADER:', self.loader)
+        # print('x::\n', x, 'y::', y)
         return x, y
 
     def _fetch_refs(self):

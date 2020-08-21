@@ -180,13 +180,18 @@ class Solver(nn.Module):
         src = next(InputFetcher(loaders.src, None, args.latent_dim, 'test'))
         ref = next(InputFetcher(loaders.ref, None, args.latent_dim, 'test'))
 
-        fname = ospj(args.result_dir, 'reference.jpg')
+        fname = ospj(args.result_dir, 'reference_avg_aligned_at_src.jpg')
         print('Working on {}...'.format(fname))
-        utils.translate_using_reference(nets_ema, args, src.x, ref.x, ref.y, fname)
-
-        fname = ospj(args.result_dir, 'video_ref.mp4')
-        print('Working on {}...'.format(fname))
-        utils.video_ref(nets_ema, args, src.x, ref.x, ref.y, fname)
+        print('REF_y:', ref.y, '---->', ref.y-1)  # DELETE AND REMOVE -1 FROM ref.y BELOW!
+        
+        # Class indexes start from index 1 instead of 0 since imagefolder is used.
+        # This causes index out of bounds error, so I shift the index array by -1 to start from 0.
+        utils.translate_using_reference(nets_ema, args, src.x, ref.x, ref.y-1, fname)
+        
+        # COMMENTED OUT THE VIDEO GENERATION DUE TO THE INDEX OUT OF BOUNDS ERROR.
+        # fname = ospj(args.result_dir, 'video_ref.mp4')
+        # print('Working on {}...'.format(fname))
+        # utils.video_ref(nets_ema, args, src.x, ref.x, ref.y, fname)
 
     @torch.no_grad()
     def evaluate(self):

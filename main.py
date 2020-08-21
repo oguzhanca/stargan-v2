@@ -26,7 +26,7 @@ def str2bool(v):
 
 def subdirs(dname):
     return [d for d in os.listdir(dname)
-            if os.path.isdir(os.path.join(dname, d))]
+            if os.path.isdir(os.path.join(dname, d)) and d != '.ipynb_checkpoints']  # EDITED! (and..)
 
 
 def main(args):

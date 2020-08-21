@@ -101,10 +101,17 @@ def translate_using_latent(nets, args, x_src, y_trg_list, z_trg_list, psi, filen
 @torch.no_grad()
 def translate_using_reference(nets, args, x_src, x_ref, y_ref, filename):
     N, C, H, W = x_src.size()
+    print('NCHW:', N, C, H, W)  # DELETE
+    
     wb = torch.ones(1, C, H, W).to(x_src.device)
     x_src_with_wb = torch.cat([wb, x_src], dim=0)
 
     masks = nets.fan.get_heatmap(x_src) if args.w_hpf > 0 else None
+    print('len(MASKS):', len(masks),'MASKS[0].SHAPE', masks[0].shape)  # DELETE
+    # print('MASKS:\n', masks)
+    print('\nX_REF.SHAPE:', x_ref.shape, 'Y_REF.SHAPE:', y_ref.shape)
+    # print('x_ref:\n', x_ref, '\n\ny_ref:\n', y_ref)  # DELETE
+    
     s_ref = nets.style_encoder(x_ref, y_ref)
     s_ref_list = s_ref.unsqueeze(1).repeat(1, N, 1)
     x_concat = [x_src_with_wb]
